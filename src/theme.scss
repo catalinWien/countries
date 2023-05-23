@@ -1,0 +1,90 @@
+//@import '~@angular/material/theming';
+// @include mat-core();
+
+// @import '~@angular/material/theming/dark-theme';
+// @import '~@angular/material/theming/light-theme';
+
+/*
+$dark-palette: (
+  50 : #e8e8e8,
+  100 : #c6c6c6,
+  200 : #a0a0a0,
+  300 : #797979,
+  400 : #5d5d5d,
+  500 : #404040,
+  600 : #3a3a3a,
+  700 : #323232,
+  800 : #2a2a2a,
+  900 : #1c1c1c,
+  A100 : #f07777,
+  A200 : #eb4949,
+  A400 : #ff0202,
+  A700 : #e70000,
+  contrast: (
+    50 : #ffffff,
+    100 : #ffffff,
+    200 : #ffffff,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #ffffff,
+    A200 : #ffffff,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  )
+);
+
+$light-palette: (
+  50 : #ffffff,
+  100 : #ffffff,
+  200 : #ffffff,
+  300 : #ffffff,
+  400 : #ffffff,
+  500 : #ffffff,
+  600 : #ffffff,
+  700 : #ffffff,
+  800 : #ffffff,
+  900 : #ffffff,
+  A100 : #ffffff,
+  A200 : #ffffff,
+  A400 : #ffffff,
+  A700 : #ffffff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #000000,
+    900 : #000000,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$custom-primary: mat-palette($dark-palette, 500);
+$custom-accent: mat-palette($dark-palette, 100);
+
+$custom-theme: mat-dark-theme($custom-primary, $custom-accent);
+@include angular-material-theme($custom-theme);
+@include dark-theme($custom-theme);
+
+$alt-primary: mat-palette($light-palette, 500);
+$alt-accent: mat-palette($light-palette, 100);
+
+$alt-theme: mat-light-theme($alt-primary, $alt-accent);
+
+.alternative {
+  @include angular-material-theme($alt-theme);
+@include light-theme($alt-theme);
+}
+*/

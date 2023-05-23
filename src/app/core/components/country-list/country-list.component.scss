@@ -1,0 +1,29 @@
+.countries-list-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  row-gap: 20px;
+  width: 100%;
+  margin: 15px auto;
+}
+.country-card {
+  width: 20%;
+}
+.subheader {
+  width: 94%;
+  margin: 0 auto;
+  line-height: 20px;
+  border-bottom: 1px solid #eee;
+}
+.subheader-content {
+  width: 100%;
+  text-align: left;
+}
+.search-form {
+  width: 80%;
+}
+.example-full-width {
+  width: 30%;
+}

@@ -1,0 +1,43 @@
+@import './app/shared/styles/index.scss';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+h1, h2, h3,
+h4, h5, h6 {
+  margin: 8px 0;
+}
+.spacer {
+  flex: 1;
+}
+div.container {
+  display: flex;
+  flex-direction: column;
+  padding: 3em;
+  height: 100vh;
+}
+.container-header {
+  width: 90vw;
+  margin: 40px auto 0px auto;
+  display: flex;
+  flex-direction: row;
+}
+.container-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.container-list>.example-card {
+  padding: 2%;
+  margin: 2%;
+  flex: 1 16%;
+
+  display: flex;
+  flex-direction: column;
+}
+.country-list-card {
+  cursor: pointer;
+}
+.country-name {
+  font-size: 1.2em;
+  font-weight: 500;
+}

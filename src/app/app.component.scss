@@ -1,0 +1,39 @@
+.mat-typography {
+  height: 100vh;
+}
+mat-toolbar {
+  background-color: #070874 !important;
+}
+.header {
+  padding: 0px;
+}
+.subtitle {
+  padding-left: 15px;
+}
+.logo-content {
+  display: block;
+  font-family: 'Arizonia', cursive;
+  font-size: 40px;
+  margin: 20px;
+  padding: 20px;
+}
+.right-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  padding-right: 40px;
+  height: 60px;
+}
+a {
+  padding: 10px;
+
+  mat-icon {
+    margin: 5px 5px 0px 0px;
+    vertical-align: middle;
+    font-size: 1.4em;
+  }
+  .button-content {
+    vertical-align: middle;
+    font-size: 1em;
+  }
+}
