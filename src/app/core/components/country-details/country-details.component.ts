@@ -10,10 +10,10 @@ import { CountriesRestService } from '@core/services/api-rest.service';
   styleUrls: ['./country-details.component.scss']
 })
 export class CountryDetailsComponent implements OnInit {
-  currentCountry: Country;
-  currencies: string;
-  languages: string;
-  displayNeighborhoodList: Neighbor[];
+  currentCountry: Country | undefined;
+  currencies: string | undefined;
+  languages: string | undefined;
+  displayNeighborhoodList: Neighbor[] | undefined;
 
   constructor(
     private router: Router,
@@ -34,22 +34,25 @@ export class CountryDetailsComponent implements OnInit {
   listCountryDetails(cca3: string): void {
     this.countriesRestService.getCountryDetails(cca3).subscribe(country => {
       if (country) {
-        this.currentCountry = country[0];
+        this.currentCountry = Object.values(country)[0];
         this.displayNeighborhoodList = [];
+        /*
         this.currentCountry = {
-          ...country[0],
-          currencies: this.getFirstElement(country[0].currencies),
-          languages: this.getFirstElement(country[0].languages)
+          ...country,
+          currencies: country.currencies,
+          languages: country.languages
         };
+        */
 
-        if (this.currentCountry.borders && this.currentCountry.borders.length > 0) {
+        if (this.currentCountry?.borders && this.currentCountry.borders.length > 0) {
           this.currentCountry.borders.map(neighborResult => {
             let neighbor: Neighbor;
 
             this.countriesRestService.getCountryDetails(neighborResult).subscribe(neighborDetails => {
-              if (neighborDetails[0]) {
-                neighbor = {cca3: neighborDetails[0].cca3, name: neighborDetails[0].name.official};
-                this.displayNeighborhoodList = [...this.displayNeighborhoodList, neighbor];
+              const neighbourData = Object.values(neighborDetails)[0];
+              if (neighbourData) {
+                neighbor = {cca3: neighbourData.cca3, name: neighbourData.name.official};
+                this.displayNeighborhoodList = [...this.displayNeighborhoodList!, neighbor];
               }
             },
             error => {
@@ -63,7 +66,7 @@ export class CountryDetailsComponent implements OnInit {
       console.log(error);
     });
   }
-
+/*
   private convertArrayToString(arrayToConvert: any[]): Object | string {
     let subArray: string[] = [];
 
@@ -73,12 +76,7 @@ export class CountryDetailsComponent implements OnInit {
 
     return subArray.toString();
   }
-
-  private getFirstElement(currentObject: Object): string {
-    const firstKey = Object.keys(currentObject)[0];
-
-    return currentObject[firstKey];
-  }
+  */
 
   goBack(): void {
     const url = '/';

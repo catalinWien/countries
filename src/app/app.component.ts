@@ -6,13 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  themeChanged: boolean;
+  themeChanged: boolean = false;
 
   constructor() {}
 
-  ngOnInit(): void {
-    this.themeChanged = false;
-  }
+  ngOnInit(): void {}
 
   changeTheme(): void {
     this.themeChanged = !this.themeChanged;

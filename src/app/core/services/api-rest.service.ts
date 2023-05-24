@@ -4,18 +4,22 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, of, throwError } from 'rxjs';
 
 import { Country } from '@core/models/countries';
-import { CONFIGS } from '@src/app/shared/configs/configs';
+import { CONFIGS } from '@app/shared/configs/configs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CountriesRestService {
+  static getCountriesList(): string {
+    throw new Error('Method not implemented.');
+  }
+  static countriesListByRegionUrl(countryAlpha3Code: string): string {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     private httpClient: HttpClient
   ) {}
-
-// GET
 
   getCountriesList(): Observable<Country[]> {
     const url = Location.joinWithSlash(CONFIGS.serverUrl, 'all');

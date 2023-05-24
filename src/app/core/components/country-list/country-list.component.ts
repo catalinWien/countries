@@ -6,8 +6,8 @@ import { map } from 'rxjs/operators';
 
 import { Country } from '@core/models/countries';
 import { CountriesRestService } from '@core/services/api-rest.service';
-import { CONFIGS } from '@src/app/shared/configs/configs';
-import { Regions } from '@src/app/shared/models/regions.models';
+import { CONFIGS } from '@app/shared/configs/configs';
+import { Regions } from '@app/shared/models/regions.models';
 
 @Component({
   selector: 'app-country-list',
@@ -18,10 +18,10 @@ export class CountryListComponent implements OnInit {
   regions = new FormControl();
   searchCountry = new FormControl();
   worldRegions: Regions[] = CONFIGS.worldRegions;
-  countriesList$: Observable<any>;
-  displayCountriesList$: Observable<Country[]>;
-  filteredCountriesList$: Observable<Country[]>;
-  filteredCountries$: Observable<string[]>;
+  countriesList$: Observable<any> | undefined;
+  displayCountriesList$: Observable<Country[]> | undefined;
+  filteredCountriesList$: Observable<Country[]> | undefined;
+  filteredCountries$: Observable<string[]> | undefined;
 
   constructor(
     private router: Router,
@@ -41,15 +41,15 @@ export class CountryListComponent implements OnInit {
   }
 
   filterByText(event: Event): void {
-    this.filteredCountriesList$ = this.countriesList$.pipe(
-      map((countries) => countries.filter(country => country.name.official.toLowerCase().includes(event)))
+    this.filteredCountriesList$ = this.countriesList$?.pipe(
+      map((countries) => countries.filter((country: any) => country.name.official.toLowerCase().includes(event)))
     );
   }
 
   filterByCountry(countryCca3: string): void {
     console.log(countryCca3);
-    this.filteredCountriesList$ = this.countriesList$.pipe(
-      map((countries) => countries.filter(country => country.cca3 === countryCca3))
+    this.filteredCountriesList$ = this.countriesList$?.pipe(
+      map((countries) => countries.filter((country: any) => country.cca3 === countryCca3))
     );
     console.log(this.filteredCountriesList$);
   }
