@@ -1,12 +1,17 @@
 {
-  "name": "ang16",
+  "name": "countries",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "build:ci": "ng build --configuration production",
+    "test": "ng test --code-coverage",
+    "test:ci": "ng test --watch false --code-coverage",
+    "lint": "npm run lint-ts && npm run lint-scss",
+    "lint-ts": "ng lint",
+    "lint-ts-fix": "ng lint --fix",
+    "lint-scss": "stylelint **/*.scss --syntax scss"
   },
   "private": true,
   "dependencies": {

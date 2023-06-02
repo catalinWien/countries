@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 
 import { Country } from '@core/models/countries';
 import { CountriesRestService } from '@core/services/api-rest.service';
@@ -29,7 +29,10 @@ export class CountryListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.countriesList$ = this.countriesRestService.getCountriesList().pipe(map(val => val));
+    this.countriesList$ = this.countriesRestService.getCountriesList().pipe(
+      tap(val => this.countriesRestService.setCountriesList(val)),
+      map(val => val)
+    );
     this.filteredCountriesList$ = this.countriesList$;
   }
 

@@ -1,16 +1,23 @@
-<section class="mat-typography mat-app-background container">
+<section class="mat-typography container">
   <div class="country-details">
-    <button (click)="goBack()" mat-raised-button class="back-button" matTooltip="Go back to the list of the countries" aria-label="Go back to the list of the countries">
+    <button
+      (click)="goTo()"
+      color="primary"
+      mat-raised-button
+      class="back-button"
+      matTooltip="Go back to the list of the countries"
+      aria-label="Go back to the list of the countries"
+    >
       <mat-icon aria-hidden="false" aria-label="Go back to main page">arrow_back</mat-icon>
       Back
     </button>
   </div>
 
   <div class="container-list country-details" *ngIf="currentCountry">
-    <div class="country-flag"><img mat-card-image [src]="currentCountry.flags.png" alt="{{currentCountry.name.official}}"></div>
+    <div class="country-flag" *ngIf="currentCountry.name"><img mat-card-image [src]="currentCountry.flags.png" alt="{{currentCountry.name.official}}"></div>
     <div class="country-info-container">
       <div class="country-info">
-        <div>
+        <div *ngIf="currentCountry.name">
           <div class="country-name">{{currentCountry.name.official}}</div>
           <p><strong>Native name:</strong> {{currentCountry.name.common}}</p>
           <p><strong>Population:</strong> {{currentCountry.population | number:'1.0-3'}}</p>
@@ -29,7 +36,14 @@
         <div class="country-actions-title">Border Countries: </div>
         <div class="country-actions-buttons-container">
           <div *ngFor="let neighbor of displayNeighborhoodList" class="country-actions-buttons">
-            <button mat-raised-button matTooltip="See details of this country" aria-label="See details of this country" (click)="goToNeighbor(neighbor.cca3)" class="neighbor-button">{{neighbor.name}}</button>
+            <button
+              color="primary"
+              mat-raised-button
+              matTooltip="See details of this country"
+              aria-label="See details of this country"
+              (click)="goTo(neighbor.cca3)"
+              class="neighbor-button"
+            >{{neighbor.name}}</button>
           </div>
         </div>
       </div>

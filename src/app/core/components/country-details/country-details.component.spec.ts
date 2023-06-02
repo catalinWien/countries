@@ -8,63 +8,85 @@ import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 
+import { Country } from '@core/models/countries';
 import { CountryDetailsComponent } from './country-details.component';
 import { CountriesRestService } from '@core/services/api-rest.service';
 
 const PAGE_URL = '/';
-const COUNTRY_ALPHA_3CODE = 'AFG';
-const COUNTRY = {
-  name: 'Colombia',
-  topLevelDomain: ['.co'],
-  alpha2Code: 'CO',
-  alpha3Code: 'COL',
-  callingCodes: ['57'],
-  capital: 'Bogotá',
-  altSpellings: ['CO', 'Republic of Colombia', 'República de Colombia'],
-  region: 'Americas',
-  subregion: 'South America',
-  population: 48759958,
-  latlng: [4.0, -72.0],
-  demonym: 'Colombian',
-  area: 1141748.0,
-  gini: 55.9,
-  timezones: ['UTC-05:00'],
-  borders: ['BRA', 'ECU', 'PAN', 'PER', 'VEN'],
-  nativeName: 'Colombia',
-  numericCode: '170',
-  currencies: [{
-    code: 'COP',
-    name: 'Colombian peso',
-    symbol: '$'
-  }],
-  languages: [{
-    iso639_1: 'es',
-    iso639_2: 'spa',
-    name: 'Spanish',
-    nativeName: 'Español'
-  }],
-  translations: {
-    de: 'Kolumbien',
-    es: 'Colombia',
-    fr: 'Colombie',
-    ja: 'コロンビア',
-    it: 'Colombia',
-    br: 'Colômbia',
-    pt: 'Colômbia'
+const COUNTRY_ALPHA_3CODE = 'COL';
+const COUNTRY: Country = {
+  "name":
+    {
+      "common":"Colombia",
+      "official":"Republic of Colombia",
+      "nativeName":
+        {
+          "spa":
+            {
+              "official":"República de Colombia",
+              "common":"Colombia"
+            }
+        }
+    },
+    "tld":[".co"],
+    "cca2":"CO",
+    "ccn3":"170",
+    "cca3":"COL",
+    "cioc":"COL",
+    "status":"officially-assigned",
+    "currencies":{"BBD":{"name":"Colombian peso","symbol":"$"}},
+    "idd":
+      {
+        "root":"+5",
+        "suffixes":["7"],
+        independent: false,
+        landlocked: false
+      },
+    "capital":["Bogotá"],
+    "altSpellings":["CO","Republic of Colombia","República de Colombia"],
+    "region":"Americas",
+    "subregion":"South America",
+    "languages":{"spa":"Spanish"},
+    "translations":
+    {
+      "ara":{"official":"جمهورية كولومبيا","common":"كولومبيا"},
+      "bre":{"official":"Republik Kolombia","common":"Kolombia"},
+      "zho":{"official":"哥伦比亚共和国","common":"哥伦比亚"}
+    },
+  "latlng":[4.0,-72.0],
+  "borders":["BRA","ECU","PAN","PER","VEN"],
+  "area":1141748.0,
+  "demonyms":
+  {
+    eng:{f:"Colombian", m:"Colombian"},
+    fra:{f:"Colombienne", m:"Colombien"},
+    fifa: "Colombienne",
+    flag: "Colombienne"
   },
-  flag: 'https://restcountries.eu/data/col.svg',
-  regionalBlocs: [{
-    acronym: 'PA',
-    name: 'Pacific Alliance',
-    otherAcronyms: [],
-    otherNames: ['Alianza del Pacífico']
-  }, {
-    acronym: 'USAN',
-    name: 'Union of South American Nations',
-    otherAcronyms: ['UNASUR', 'UNASUL', 'UZAN'],
-    otherNames: ['Unión de Naciones Suramericanas', 'União de Nações Sul-Americanas', 'Unie van Zuid-Amerikaanse Naties', 'South American Union']
-  }],
-  cioc: 'COL'
+  "maps":
+  {
+    "googleMaps":"https://goo.gl/maps/RdwTG8e7gPwS62oR6",
+    "openStreetMaps":"https://www.openstreetmap.org/relation/120027"
+  },
+  "population":50882884,
+  "gini":{"2019":51.3},
+  "fifa":"COL",
+  "car":{"signs":["CO"],"side":"right"},
+  "timezones":["UTC-05:00"],
+  "continents":["South America"],
+  "flags":
+  {
+    "png":"https://flagcdn.com/w320/co.png",
+    "svg":"https://flagcdn.com/co.svg",
+    "alt":"The flag of Colombia is composed of three horizontal bands of yellow, blue and red, with the yellow band twice the height of the other two bands."
+  },
+  "coatOfArms":
+  {
+    "png":"https://mainfacts.com/media/images/coats_of_arms/co.png",
+    "svg":"https://mainfacts.com/media/images/coats_of_arms/co.svg"
+  },
+  "startOfWeek":"monday",
+  "capitalInfo":{"latlng":[4.71,-74.07]}
 };
 
 describe('CountryDetailsComponent', () => {
@@ -72,7 +94,7 @@ describe('CountryDetailsComponent', () => {
   let routerSpy: jasmine.SpyObj<Router>;
   let component: CountryDetailsComponent;
   let fixture: ComponentFixture<CountryDetailsComponent>;
-  let countriesRestSpy;
+  let countriesRestSpy: CountriesRestService;
 
   beforeEach(async () => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
@@ -124,7 +146,7 @@ describe('CountryDetailsComponent', () => {
     expect(component.listCountryDetails).toHaveBeenCalledWith(COUNTRY_ALPHA_3CODE);
   }));
 
-  it('should get country details', fakeAsync(() => {
+  it('should get country details by cca3 value', fakeAsync(() => {
     spyOn(countriesRestSpy, 'getCountryDetails').and.returnValue(of(COUNTRY));
 
     component.listCountryDetails(COUNTRY_ALPHA_3CODE);
@@ -150,13 +172,5 @@ describe('CountryDetailsComponent', () => {
       expect(router.navigate).toHaveBeenCalledWith([PAGE_URL]);
       flush();
     });
-  });
-
-  it('should goToNeighbor', () => {
-    spyOn(component, 'goToNeighbor').and.callThrough();
-
-    component.goToNeighbor(COUNTRY_ALPHA_3CODE);
-
-    expect(component.goToNeighbor).toHaveBeenCalledWith(COUNTRY_ALPHA_3CODE);
   });
 });

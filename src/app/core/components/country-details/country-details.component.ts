@@ -34,30 +34,25 @@ export class CountryDetailsComponent implements OnInit {
   listCountryDetails(cca3: string): void {
     this.countriesRestService.getCountryDetails(cca3).subscribe(country => {
       if (country) {
-        this.currentCountry = Object.values(country)[0];
+        this.currentCountry = country;
         this.displayNeighborhoodList = [];
-        /*
-        this.currentCountry = {
-          ...country,
-          currencies: country.currencies,
-          languages: country.languages
-        };
-        */
 
         if (this.currentCountry?.borders && this.currentCountry.borders.length > 0) {
           this.currentCountry.borders.map(neighborResult => {
-            let neighbor: Neighbor;
-
-            this.countriesRestService.getCountryDetails(neighborResult).subscribe(neighborDetails => {
-              const neighbourData = Object.values(neighborDetails)[0];
-              if (neighbourData) {
-                neighbor = {cca3: neighbourData.cca3, name: neighbourData.name.official};
-                this.displayNeighborhoodList = [...this.displayNeighborhoodList!, neighbor];
-              }
-            },
-            error => {
-              console.log(error);
-            });
+            if (neighborResult) {
+              console.log(neighborResult);
+              let neighbor: Neighbor;
+  
+              this.countriesRestService.getCountryDetails(neighborResult).subscribe(neighborDetails => {
+                if (neighborDetails) {
+                  neighbor = {cca3: neighborDetails.cca3, name: neighborDetails.name.official};
+                  this.displayNeighborhoodList = [...this.displayNeighborhoodList!, neighbor];
+                }
+              },
+              error => {
+                console.log(error);
+              });
+            }
           });
         }
       }
@@ -66,26 +61,9 @@ export class CountryDetailsComponent implements OnInit {
       console.log(error);
     });
   }
-/*
-  private convertArrayToString(arrayToConvert: any[]): Object | string {
-    let subArray: string[] = [];
 
-    arrayToConvert.map(elem => {
-      subArray = (subArray && subArray.length === 0) ? [elem.name] : [...subArray, elem.name];
-    });
-
-    return subArray.toString();
-  }
-  */
-
-  goBack(): void {
-    const url = '/';
-
-    this.router.navigate([url]);
-  }
-
-  goToNeighbor(cca3: string): void {
-    const url = '/country/' + cca3;
+  goTo(cca3?: string): void {
+    const url = (cca3) ? '/country/' + cca3 : '/';
 
     this.router.navigate([url]);
   }

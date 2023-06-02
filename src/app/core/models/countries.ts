@@ -45,10 +45,8 @@ export interface Country {
     official: string;
   };
   population: number;
-  postalCode: {
-    format: string;
-    regex: string;
-  };
+  gini: object;
+  fifa: string;
   region: string;
   startOfWeek: string;
   status: string;
@@ -74,7 +72,7 @@ interface Currencies {
 }
 interface Demonyms {
   eng: {f: string; m: string};
-  fr: {f: string; m: string};
+  fra: {f: string; m: string};
   fifa: string;
   flag: string;
 }

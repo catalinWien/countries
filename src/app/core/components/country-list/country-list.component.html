@@ -1,4 +1,4 @@
-<section class="mat-typography mat-app-background container">
+<section class="mat-typography container">
   <div class="container-header">
     <form class="search-form">
       <mat-form-field class="example-full-width" appearance="fill" matTooltip="Search for a country" aria-label="Search for a country">
@@ -50,7 +50,7 @@
           aria-label="See details of this country"
         >
           <mat-card-content>
-            <div class="flex flex-row">
+            <div class="flex flex-row country-name-container">
               <img mat-card-image [src]="country.flags.png" alt="{{country.flags.alt}}" height="100">
               <div class="padding-10 country-name">{{country.name.official}}</div>
             </div>
