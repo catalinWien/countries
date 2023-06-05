@@ -1,7 +1,7 @@
 <section class="mat-typography container">
   <div class="country-details">
     <button
-      (click)="goTo()"
+      routerLink="/"
       color="primary"
       mat-raised-button
       class="back-button"
@@ -41,7 +41,7 @@
               mat-raised-button
               matTooltip="See details of this country"
               aria-label="See details of this country"
-              (click)="goTo(neighbor.cca3)"
+              [routerLink]="['/country/', neighbor.cca3, '/']"
               class="neighbor-button"
             >{{neighbor.name}}</button>
           </div>

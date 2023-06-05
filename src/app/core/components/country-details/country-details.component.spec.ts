@@ -159,18 +159,4 @@ describe('CountryDetailsComponent', () => {
       expect(console.error).toHaveBeenCalledWith(error);
     });
   }));
-
-  it('should redirect to main page after click on \'Back\' button', () => {
-    fixture.detectChanges();
-    const buttonElement = fixture.debugElement.query(By.css('button.back-button')).nativeElement as HTMLInputElement;
-
-    buttonElement.click();
-    router.navigate([PAGE_URL]);
-    fixture.detectChanges();
-
-    fixture.whenStable().then(() => {
-      expect(router.navigate).toHaveBeenCalledWith([PAGE_URL]);
-      flush();
-    });
-  });
 });

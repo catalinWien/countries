@@ -44,7 +44,7 @@
     <div class="countries-list-content">
       <div *ngFor="let country of filteredCountriesList" class="country-card">
         <mat-card
-          (click)="countryDetails(country.cca3)"
+          [routerLink]="['/country/', country.cca3]"
           class="country-list-card"
           matTooltip="See details of this country"
           aria-label="See details of this country"

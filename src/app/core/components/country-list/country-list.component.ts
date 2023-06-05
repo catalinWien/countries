@@ -50,16 +50,8 @@ export class CountryListComponent implements OnInit {
   }
 
   filterByCountry(countryCca3: string): void {
-    console.log(countryCca3);
     this.filteredCountriesList$ = this.countriesList$?.pipe(
       map((countries) => countries.filter((country: any) => country.cca3 === countryCca3))
     );
-    console.log(this.filteredCountriesList$);
-  }
-
-  countryDetails(cca3: string): void {
-    const url = '/country/' + cca3;
-
-    this.router.navigate([url]);
   }
 }

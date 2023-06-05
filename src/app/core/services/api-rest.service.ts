@@ -49,7 +49,6 @@ export class CountriesRestService {
   }
 
   getCountryDetails(countryAlpha3Code: string): Observable<Country> {
-    console.log(countryAlpha3Code);
     return this.selectedCountriesList$.pipe(
       map((value) => {
         return value.filter((cntry) => cntry.cca3 === countryAlpha3Code)[0];

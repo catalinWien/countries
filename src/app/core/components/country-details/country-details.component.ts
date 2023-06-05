@@ -40,7 +40,6 @@ export class CountryDetailsComponent implements OnInit {
         if (this.currentCountry?.borders && this.currentCountry.borders.length > 0) {
           this.currentCountry.borders.map(neighborResult => {
             if (neighborResult) {
-              console.log(neighborResult);
               let neighbor: Neighbor;
   
               this.countriesRestService.getCountryDetails(neighborResult).subscribe(neighborDetails => {
@@ -60,11 +59,5 @@ export class CountryDetailsComponent implements OnInit {
     error => {
       console.log(error);
     });
-  }
-
-  goTo(cca3?: string): void {
-    const url = (cca3) ? '/country/' + cca3 : '/';
-
-    this.router.navigate([url]);
   }
 }

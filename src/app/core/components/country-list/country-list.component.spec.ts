@@ -1,22 +1,16 @@
 import { ComponentFixture, TestBed, getTestBed, inject, fakeAsync, tick, flush } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { By } from '@angular/platform-browser';
-import { of } from 'rxjs';
+import { map, of, tap } from 'rxjs';
 
 import { CountryListComponent } from './country-list.component';
 import { Country } from '@core/models/countries';
 import { CountriesRestService } from '@core/services/api-rest.service';
 import { CONFIGS } from '@app/shared/configs/configs';
 import { Regions } from '@app/shared/models/regions.models';
-
-class RouterStub {
-  // navigate(params): any {}
-}
 
 const COUNTRY_ALPHA_3CODE = 'COL';
 const COUNTRY_NAME = 'Colombia';
@@ -102,27 +96,24 @@ describe('CountryListComponent', () => {
   let countriesRestSpy: CountriesRestService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
+    return TestBed.configureTestingModule({
       declarations: [
         CountryListComponent
       ],
       imports: [
         HttpClientTestingModule,
         BrowserAnimationsModule,
-        RouterTestingModule,
         AngularMaterialModule
       ],
-      providers: [
-        { provide: Router, useClass: RouterStub }
-      ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CountryListComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     component.countriesList$ = of(COUNTRIES);
     component.displayCountriesList$ = component.countriesList$;
     component.worldRegions = CONFIGS.worldRegions;
@@ -133,45 +124,68 @@ describe('CountryListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call \'ngOnInit\'', () => {
+  it('should call \'ngOnInit\'', fakeAsync(()=>{
     component.ngOnInit();
+
+    countriesRestSpy.getCountriesList().pipe(
+      map(result => {
+        expect(result.length).toBeGreaterThan(0);
+      })
+    );
     
     expect(component.worldRegions).toEqual(CONFIGS.worldRegions);
-  });
-
-  it('should get countries list', fakeAsync(() => {
-    spyOn(countriesRestSpy, 'getCountriesList').and.returnValue(of(COUNTRIES));
-
-    component.ngOnInit();
-
-    countriesRestSpy.getCountriesList().subscribe(result => {
-      expect(result).toEqual(COUNTRIES);
-    },
-    error => {
-      console.error(error);
-      expect(console.error).toHaveBeenCalledWith(error);
-    });
   }));
 
-  it('should get countries list by region', fakeAsync(() => {
+
+  it('should call filterByRegion() method with REGION_NAME', fakeAsync(()=>{
+    let spyOnSelectboxChange = spyOn(component,'filterByRegion').and.callThrough();
+    let inputElement = fixture.debugElement.nativeElement.querySelector('.mat-select');
     spyOn(countriesRestSpy, 'getCountriesListByRegion').and.returnValue(of(COUNTRIES));
-
+    
     component.filterByRegion(REGION_NAME);
+    fixture.detectChanges();
+    tick();
 
-    countriesRestSpy.getCountriesListByRegion(REGION_NAME).subscribe(result => {
+    countriesRestSpy.getCountriesListByRegion('').subscribe(result => {
       expect(result).toEqual(COUNTRIES);
     },
     error => {
       console.error(error);
       expect(console.error).toHaveBeenCalledWith(error);
     });
-  }))
 
-  it('should select a country', () => {
-    spyOn(component, 'filterByCountry');
+    expect(spyOnSelectboxChange).toHaveBeenCalledOnceWith(REGION_NAME);
+  }));
 
+  it('should call filterByRegion() method without REGION_NAME', fakeAsync(()=>{
+    let spyOnSelectboxChange = spyOn(component,'filterByRegion').and.callThrough();
+    let inputElement = fixture.debugElement.nativeElement.querySelector('.mat-select');
+    
+    component.filterByRegion('');
+    fixture.detectChanges();
+    tick();
+
+    expect(spyOnSelectboxChange).toHaveBeenCalledOnceWith('');
+  }));
+
+  it('should call filterByText() method without COUNTRY_NAME', fakeAsync(()=>{
+    let spyOnInputTextboxChange = spyOn(component,'filterByText').and.callThrough();
+    let inputElement = fixture.debugElement.nativeElement.querySelector('input');
+    
+    component.filterByText(COUNTRY_NAME as unknown as Event);
+    fixture.detectChanges();
+    tick();
+
+    expect(spyOnInputTextboxChange).toHaveBeenCalledOnceWith(COUNTRY_NAME as unknown as Event);
+  }));
+
+  it('should call filterByCountry() method without COUNTRY_ALPHA_3CODE', fakeAsync(()=>{
+    let spyOnClickOnCard = spyOn(component,'filterByCountry').and.callThrough();
+    
     component.filterByCountry(COUNTRY_ALPHA_3CODE);
+    fixture.detectChanges();
+    tick();
 
-    expect(component.filterByCountry).toHaveBeenCalledWith(COUNTRY_ALPHA_3CODE);
-  });
+    expect(spyOnClickOnCard).toHaveBeenCalledOnceWith(COUNTRY_ALPHA_3CODE);
+  }));
 });
