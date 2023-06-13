@@ -153,6 +153,16 @@ describe('CountryDetailsComponent', () => {
 
     countriesRestSpy.getCountryDetails(COUNTRY_ALPHA_3CODE).subscribe(result => {
       expect(result).toEqual(COUNTRY);
+
+      result.borders?.map(neighborResult => {
+        countriesRestSpy.getCountryDetails(neighborResult).subscribe(neighborDetails => {
+          expect(neighborDetails).toEqual(COUNTRY);
+        },
+        error => {
+          console.error(error);
+          expect(console.error).toHaveBeenCalledWith(error);
+        });
+      });
     },
     error => {
       console.error(error);
