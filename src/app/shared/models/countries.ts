@@ -56,8 +56,12 @@ export interface Country {
   translations: {};
 }
 export interface Neighbor {
-  cca3: string;
-  name: string;
+  cca3?: string;
+  name?: string;
+}
+export interface SearchForm {
+  cca3?: string;
+  name?: string;
 }
 interface CapitalInfo {
   latlng: number[];
@@ -75,4 +79,22 @@ interface Demonyms {
   fra: {f: string; m: string};
   fifa: string;
   flag: string;
+}
+export interface CountryWithNeighbors extends Country {
+  neighbors: Neighbor[]
+}
+export interface CountriesState {
+  allCountries: Country[],
+  selectedCountryByCca3?: SelectedCountryState,
+  filter?: Filter
+}
+export interface SelectedCountryState {
+  cca3?: string,
+  country?: Country,
+  neighbors?: Neighbor[]
+}
+export interface Filter {
+  type?: string,
+  value?: string,
+  countries?: Country[]
 }

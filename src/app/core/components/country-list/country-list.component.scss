@@ -1,10 +1,36 @@
+.container-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3em;
+  width: 94vw;
+}
+.container-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.container-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.container-list>.example-card {
+  padding: 2%;
+  margin: 2%;
+  flex: 1 16%;
+
+  display: flex;
+  flex-direction: column;
+}
 .countries-list-content {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
-  row-gap: 20px;
+  gap: 10px;
+  row-gap: 10px;
   width: 100%;
   margin: 15px auto;
 }
@@ -18,7 +44,7 @@
   min-height: 120px;
 }
 .subheader {
-  width: 94%;
+  width: 94vw;
   margin: 0 auto;
   line-height: 20px;
   border-bottom: 1px solid #eee;
@@ -28,7 +54,7 @@
   text-align: left;
 }
 .search-form {
-  width: 80%;
+  width: 94vw;
 }
 .example-full-width {
   width: 30%;

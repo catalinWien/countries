@@ -28,7 +28,6 @@
       "@app/*": ["src/app/*"],
       "@environments/*": ["src/environments/*"],
       "@shared/*": ["src/app/shared/*"],
-      "@app/*": ["src/app/*"],
       "@core/*": ["src/app/core/*"]
     },
     "useDefineForClassFields": false

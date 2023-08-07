@@ -1,6 +1,6 @@
-<section class="mat-typography container">
+<div class="container-wrap" *ngIf="(countriesList$ | async) as filteredCountriesList">
+  <form [formGroup]="searchFilterForm" class="search-form">
   <div class="container-header">
-    <form class="search-form">
       <mat-form-field class="example-full-width" appearance="fill" matTooltip="Search for a country" aria-label="Search for a country">
         <mat-icon matPrefix>search</mat-icon>
         <input
@@ -8,35 +8,37 @@
           matInput
           placeholder="Search for a country..."
           aria-label="Country"
-          (ngModelChange)="filterByText($event)"
-          [formControl]="searchCountry"
+          (keyup)="filterCountries(appConfigs.formControlName.searchByText)"
+          formControlName="searchByText"
         >
         <mat-autocomplete #auto="matAutocomplete">
           <mat-option
-            *ngFor="let country of (filteredCountriesList$ | async)"
+            *ngFor="let country of filteredCountriesList"
             [value]="country.cca3"
-            (click)="filterByCountry(country.cca3)"
             class="select-region"
           >
             {{country.name.official}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-    </form>
     <div class="spacer"></div>
-    <form class="filter-form">
+    <div class="filter-form">
       <mat-form-field appearance="fill" matTooltip="Filter countries by region" aria-label="Filter countries by region">
-        <mat-label>Filter by Region</mat-label>
-        <mat-select [formControl]="regions">
-          <mat-option *ngFor="let region of worldRegions" [value]="region" (click)="filterByRegion(region.value)">
+        <mat-select formControlName="filterByRegion">
+          <mat-option
+            *ngFor="let region of worldRegions"
+            [value]="region.value"
+            (click)="filterCountries(appConfigs.formControlName.filterByRegion)"
+          >
             {{region.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-    </form>
+    </div>
   </div>
+  </form>
   
-  <div class="container-list" *ngIf="(filteredCountriesList$ | async) as filteredCountriesList">
+  <div class="container-list" *ngIf="filteredCountriesList">
     <div class="subheader">
       <div class="subheader-content" *ngIf="filteredCountriesList.length > 1">Countries: {{filteredCountriesList.length}}</div>
     </div>
@@ -44,7 +46,7 @@
     <div class="countries-list-content">
       <div *ngFor="let country of filteredCountriesList" class="country-card">
         <mat-card
-          [routerLink]="['/country/', country.cca3]"
+          [routerLink]="['/countries', country.cca3]"
           class="country-list-card"
           matTooltip="See details of this country"
           aria-label="See details of this country"
@@ -64,4 +66,4 @@
       </div>
     </div>
   </div>
-</section>
+</div>

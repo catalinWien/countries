@@ -7,8 +7,8 @@ import { By } from '@angular/platform-browser';
 import { map, of, tap } from 'rxjs';
 
 import { CountryListComponent } from './country-list.component';
-import { Country } from '@core/models/countries';
-import { CountriesRestService } from '@core/services/api-rest.service';
+import { Country } from '@app/shared/models/countries';
+import { CountriesRestService } from '@app/shared/services/app-rest.service';
 import { CONFIGS } from '@app/shared/configs/configs';
 import { Regions } from '@app/shared/models/regions.models';
 

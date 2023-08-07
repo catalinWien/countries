@@ -1,63 +1,56 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
-import { Country, Neighbor } from '@core/models/countries';
-import { CountriesRestService } from '@core/services/api-rest.service';
+import { CountriesState, Neighbor, SelectedCountryState } from '@app/shared/models/countries';
+import { AngularMaterialModule } from '@app/shared/angular-material.module';
+import { CommonModule, NgForOf, NgIf } from '@angular/common';
+import { Store, select } from '@ngrx/store';
+import { storeSelectedCca3 } from '@app/shared/store/countries/countries.actions';
+import { selectCountryByCca3, selectNeighbours } from '@app/shared/store/countries/countries.selectors';
+import { Subject, filter, takeUntil, Observable, tap } from 'rxjs';
+import { CONFIGS } from '@app/shared/configs/configs';
 
 @Component({
   selector: 'app-country-details',
   templateUrl: './country-details.component.html',
-  styleUrls: ['./country-details.component.scss']
+  styleUrls: ['./country-details.component.scss'],
+  standalone: true,
+  imports: [CommonModule, NgIf, NgForOf, RouterModule, AngularMaterialModule]
 })
 export class CountryDetailsComponent implements OnInit {
-  currentCountry: Country | undefined;
+  currentCountry$?: Observable<SelectedCountryState | undefined>;
   currencies: string | undefined;
   languages: string | undefined;
-  displayNeighborhoodList: Neighbor[] | undefined;
+  neighborhoodList$?: Observable<Neighbor[] | undefined>;
+  private readonly unsubscribe: Subject<void> = new Subject<void>();
+  bttnAction = signal(CONFIGS.bttnActions.null);
 
   constructor(
+    private store: Store<CountriesState>,
     private router: Router,
-    private route: ActivatedRoute,
-    private countriesRestService: CountriesRestService
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-        this.listCountryDetails(Object.values(params)[0].cca3);
-      },
-      error => {
-        console.log(error);
-      }
+    this.route.paramMap.subscribe(params => this.store.dispatch(storeSelectedCca3(Object.values(params)[0].cca3)))
+    this.currentCountry$ = this.store.pipe(
+      select(selectCountryByCca3),
+      filter(country => !!country),
+      takeUntil(this.unsubscribe)
+    );
+    this.neighborhoodList$ = this.store.pipe(
+      select(selectNeighbours),
+      takeUntil(this.unsubscribe)
     );
   }
 
-  listCountryDetails(cca3: string): void {
-    this.countriesRestService.getCountryDetails(cca3).subscribe(country => {
-      if (country) {
-        this.currentCountry = country;
-        this.displayNeighborhoodList = [];
+  goBack(): void {
+    this.bttnAction.set(CONFIGS.bttnActions.wentBack);
+    this.router.navigate(['/']);
+  }
 
-        if (this.currentCountry?.borders && this.currentCountry.borders.length > 0) {
-          this.currentCountry.borders.map(neighborResult => {
-            if (neighborResult) {
-              let neighbor: Neighbor;
-  
-              this.countriesRestService.getCountryDetails(neighborResult).subscribe(neighborDetails => {
-                if (neighborDetails) {
-                  neighbor = {cca3: neighborDetails.cca3, name: neighborDetails.name.official};
-                  this.displayNeighborhoodList = [...this.displayNeighborhoodList!, neighbor];
-                }
-              },
-              error => {
-                console.log(error);
-              });
-            }
-          });
-        }
-      }
-    },
-    error => {
-      console.log(error);
-    });
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }

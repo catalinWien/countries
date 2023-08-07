@@ -28,7 +28,6 @@ describe('AppComponent', () => {
 
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
-    component.themeChanged = false;
     loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
@@ -42,14 +41,5 @@ describe('AppComponent', () => {
     component.ngOnInit();
 
     expect(component.ngOnInit).toHaveBeenCalled();
-    expect(component.themeChanged).toBeFalsy();
-  });
-
-  it('should call \'changeTheme\'', () => {
-    spyOn(component, 'changeTheme').and.callThrough();
-
-    component.changeTheme();
-
-    expect(component.changeTheme).toHaveBeenCalled();
   });
 });
