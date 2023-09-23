@@ -1,18 +1,18 @@
-import { createAction, props } from "@ngrx/store";
+import { Country, Neighbor } from '@models/country';
+import { createAction } from '@ngrx/store';
 
-import { Country, Filter } from "@app/shared/models/countries";
-import { Neighbor } from '../../models/countries';
+export const initAppSession = createAction('[App] init app session');
 
-export const fetchAllCountriesList = createAction('[CountriesList] fetch list of all countries');
+export const initCountriesListSession = createAction('[App] init countries list', (countries: Country[]) => ({ countries }));
 
-export const storeAllCountriesList = createAction('[CountriesList] store list of all countries', (payload: Country[]) => ({ payload }));
+export const setFilterId = createAction('[Countries list] set filter id', (filterId: string) => ({ filterId }));
 
-export const storeFilter = createAction('[CountriesList] store filter criteria', (filter: Filter) => ({ filter }));
+export const setFilteredCountries = createAction('[Countries list] set list of filtered countries', (countries: Country[]) => ({ countries }));
 
-export const storeFilteredCountries = createAction('[CountriesList] store filtered countries', (filteredCountries: Country[]) => ({ filteredCountries }));
+export const setCCA3ForSelectedCountry = createAction('[Countries details] set cca3 for selected country', (cca3: string | undefined) => ({ cca3 }));
 
-export const storeSelectedCca3 = createAction('[CountriesList] store selected cca3', (payload: string) => ({ payload }));
+export const setSelectedCountry = createAction('[Countries details] set selected country', (country: Country) => ({ country }));
 
-export const storeSelectedCountryByCca3 = createAction('[CountriesList] store selected country by cca3', (payload: Country | undefined) => ({ payload }));
+export const setNeighborsForSelectedCountry = createAction('[Countries details] set neighbors for selected country', (neighbors: Neighbor[]) => ({ neighbors }));
 
-export const storeSelectedCountryNeighbours = createAction('[CountriesList] store neighbours of selected country', (neighborArray: Neighbor[]) => ({ neighborArray }));
+export const initNeighborsList = createAction('[Countries details] init neighbors list');

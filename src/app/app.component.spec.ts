@@ -1,45 +1,36 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { HarnessLoader, parallel } from '@angular/cdk/testing';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { AngularMaterialModule } from '@app/shared/angular-material.module';
-
-import { AppComponent } from './app.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { AppComponent } from "./app.component";
+import { provideStore } from "@ngrx/store";
+import { initialState } from "@store/countries/countries.store";
+import { MockStore, provideMockStore } from "@ngrx/store/testing";
+import { initAppSession } from "@store/countries/countries.actions";
 
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
-  let loader: HarnessLoader;
+  let store: MockStore;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        AngularMaterialModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-      schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [AppComponent],
+      providers: [
+        provideStore(),
+        provideMockStore({ initialState })
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
-    loader = TestbedHarnessEnvironment.loader(fixture);
+    store = TestBed.inject(MockStore);
+    fixture.detectChanges();
   });
 
-  it('should create the App component', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should call \'ngOnInit\'', () => {
-    spyOn(component, 'ngOnInit').and.callThrough();
-
-    component.ngOnInit();
-
-    expect(component.ngOnInit).toHaveBeenCalled();
+  it('should dispatch initAppSession() on init', () => {
+    const dispatchSpy = spyOn(store, 'dispatch').and.callThrough();
+    
+    TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+  
+    expect(dispatchSpy).toHaveBeenCalledWith(initAppSession());
   });
 });

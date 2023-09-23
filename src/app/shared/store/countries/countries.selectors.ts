@@ -1,31 +1,22 @@
-import { MemoizedSelector, Selector, createFeatureSelector, createSelector } from "@ngrx/store";
+import { FEATURE_CONFIG } from '@configs/store';
+import { CountriesState, Country, SelectedCountryState } from '@models/country';
+import { createFeatureSelector, createSelector, MemoizedSelector, Selector } from '@ngrx/store';
 
-import { CONFIGS } from "@app/shared/configs/configs";
-import { CountriesState, Country, Filter, Neighbor, SelectedCountryState } from "@app/shared/models/countries";
-
-export const countriesStoreFeatureSelector: Selector<object, CountriesState> = createFeatureSelector<CountriesState>( CONFIGS.store );
+export const countriesStoreFeatureSelector: Selector<object, CountriesState> = createFeatureSelector<CountriesState> (
+  FEATURE_CONFIG.ALL_COUNTRIES
+);
 
 export const selectAllCountriesList: MemoizedSelector<CountriesState, Country[]> = createSelector(
   countriesStoreFeatureSelector,
-  (state: CountriesState) => state.allCountries
+  (state: CountriesState) => state?.allCountries
 );
 
-export const selectFilter: MemoizedSelector<CountriesState, Filter | undefined> = createSelector(
+export const selectFilteredCountriesList: MemoizedSelector<CountriesState, Country[] | undefined> = createSelector(
   countriesStoreFeatureSelector,
-  (state: CountriesState) => state.filter
+  (state: CountriesState) => state?.filter?.countries
 );
 
-export const selectCca3: MemoizedSelector<CountriesState, string | undefined> = createSelector(
+export const getSelectedCountry: MemoizedSelector<CountriesState, SelectedCountryState | undefined> = createSelector(
   countriesStoreFeatureSelector,
-  (state: CountriesState) => state.selectedCountryByCca3?.cca3
-);
-
-export const selectCountryByCca3: MemoizedSelector<CountriesState, SelectedCountryState | undefined> = createSelector(
-  countriesStoreFeatureSelector,
-  (state: CountriesState) => state.selectedCountryByCca3
-);
-
-export const selectNeighbours: MemoizedSelector<CountriesState, Neighbor[] | undefined> = createSelector(
-  countriesStoreFeatureSelector,
-  (state: CountriesState) => state.selectedCountryByCca3?.neighbors
+  (state: CountriesState) => state?.selectedCountry
 );

@@ -1,22 +1,98 @@
-@import './app/shared/styles/index.scss';
+@import 'app/shared/styling/index';
 
 html, body { height: 100%; }
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif; 
-  background-color: #9293ff !important;
+  font-family: $font-family;
+  background-color: $background-color;
 }
-h1, h2, h3,
-h4, h5, h6 {
-  margin: 8px 0;
+.main-container {
+  width: 96%;
+  margin: 20px auto;
 }
-.spacer {
-  flex: 1;
+.country-list-container {
+  @include flex;
+
+  flex-wrap: wrap;
+  margin: 0 auto;
+  height: 200px;
 }
-.country-list-card {
+.country-list-element {
+  width: 25%;
+}
+.country-card {
+  margin: 10px;
+  background-color: $card-background-color;
+  min-height: 180px;
   cursor: pointer;
 }
-.country-name {
-  font-size: 1.2em;
-  font-weight: 500;
+mat-card-title {
+  padding: 8px 15px;
+  color: $text-color;
+  border-bottom: 1px dashed $text-color;
+}
+mat-card-content {
+  .content {
+    display: flex;
+    flex-direction: row !important;
+    margin: 10px;
+  }
+  .image {
+    width: 150px;
+
+    img{
+      width: 150px;
+    }
+  }
+  .details {
+    padding-left: 10px;
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+.details-content {
+  width: 96%;
+  margin: 0 auto;
+
+  .title {
+    color: $text-color;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  .neighbors-container {
+    @include flex-row;
+
+    button {
+      margin: 0 5px;
+      background-color: $button-background-color;
+    }
+  }
+}
+.back-button-container {
+  button {
+    background-color: $white;
+  }
+}
+
+@media only screen and (max-width: 1440px) and (min-width: 1023px) {
+  .country-list-element {
+    width: 33%;
+  }
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 424px) {
+  .country-list-element {
+    width: 50%;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  .country-list-element {
+    width: 100%;
+  }
 }

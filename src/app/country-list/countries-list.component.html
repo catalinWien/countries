@@ -1,0 +1,21 @@
+<div>
+  <form [formGroup]="searchForm" class="search-form">
+  <div style="display: flex;flex-direction: row;width: auto;margin: 0 auto;padding: 20px 20px 10px 20px;">
+    <div style="display: flex;flex-basis:50%;justify-content: flex-start;">
+      <mat-form-field>
+        <mat-label>Search a country</mat-label>
+        <input matInput formControlName="searchCountry">
+      </mat-form-field>
+    </div>
+  </div>
+  </form>
+  <div *ngIf="(countriesListResult$ | async) as countries" class="country-list-container">
+    <country-card
+      *ngFor="let country of countries"
+      [country]="country"
+      (click)="displayCountryDetails(country.cca3)"
+      class="country-list-element"
+    >
+    </country-card>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<div *ngIf="(selectedCountryDetailsResult$ | async) as selectedCountry" class="details-content">
+  <div class="back-button-container"><button mat-raised-button (click)="goBack()">Back</button></div>
+
+  <div class="title">{{selectedCountry.country?.name?.official}}</div>
+  
+  <div class="content">
+    <div class="image"><img [src]="selectedCountry.country?.flags?.png" alt="{{selectedCountry.country?.flags?.alt}}"></div>
+    <div class="details">
+      <p><b>Region:</b> {{selectedCountry.country?.region}}</p>
+      <p><b>Population:</b> {{selectedCountry.country?.population}}</p>
+    </div>
+    <div class="neighbors-container" *ngIf="selectedCountry.neighbors && selectedCountry.neighbors.length !== 0">
+      <button
+        mat-raised-button
+        *ngFor="let neighbor of selectedCountry.neighbors"
+        (click)="goToNeighborDetails(neighbor.cca3)"
+      >
+        {{neighbor.name}}
+      </button>
+    </div>
+  </div>
+</div>

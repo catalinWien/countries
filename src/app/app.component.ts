@@ -1,25 +1,23 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { AngularMaterialModule } from './shared/angular-material.module';
-import { CountryListComponent } from './core/components/country-list/country-list.component';
-import { CountryDetailsComponent } from './core/components/country-details/country-details.component';
-import { fetchAllCountriesList } from './shared/store/countries/countries.actions';
-import { CountriesState } from './shared/models/countries';
+import { Component, OnDestroy } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+
+import { HeaderComponent } from '@components/header/header.component';
 import { Store } from '@ngrx/store';
+import { CountriesState } from './shared/models/country';
+import { initAppSession } from '@store/countries/countries.actions';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: true,
-  imports: [CommonModule, RouterModule, AngularMaterialModule, CountryListComponent, CountryDetailsComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+  imports: [ CommonModule, RouterOutlet, HeaderComponent ]
 })
-export class AppComponent implements OnInit {
-  constructor( private store: Store<CountriesState> ) {}
-
-  ngOnInit(): void {
-    this.store.dispatch(fetchAllCountriesList());
+export class AppComponent {
+  constructor(
+    private readonly countriesStore: Store<CountriesState>
+  ) {
+    this.countriesStore.dispatch(initAppSession());
   }
 }

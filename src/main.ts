@@ -1,46 +1,32 @@
-import { enableProdMode, importProvidersFrom } from '@angular/core';
-
-import { environment } from './environments/environment';
-import { AppComponent } from '@app/app.component';
-import { HttpClientModule, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+import { APP_ROUTES } from '@routes/app.route';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { importProvidersFrom } from '@angular/core';
+import { AngularMaterialModule } from '@modules/angular-material.module';
+import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
-import { coutriesReducer } from '@app/shared/store/countries/countries.store';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { CountriesEffects } from '@app/shared/store/countries/countries.effects';
 import { EffectsModule } from '@ngrx/effects';
-import { AngularMaterialModule } from '@app/shared/angular-material.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { appRoutes } from '@app/app-routing.module';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-if (environment.production) {
-  enableProdMode();
-}
+import { AppComponent } from '@app/app.component';
+import { getCountriesReducer } from '@store/countries/countries.store';
+import { CountriesEffects } from '@store/countries/countries.effects';
+import { CountriesService } from '@services/countries.service';
 
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(
-      BrowserModule,
-      BrowserAnimationsModule,
       HttpClientModule,
-      RouterModule.forRoot(appRoutes),
       AngularMaterialModule,
-      FormsModule,
-      ReactiveFormsModule,
       StoreModule.forRoot({
-        countries: coutriesReducer,
+        countries: getCountriesReducer,
       }),
-      StoreRouterConnectingModule.forRoot(),
-      StoreDevtoolsModule.instrument({name: 'Countries store', maxAge: 5}),
-      EffectsModule.forRoot([CountriesEffects])
+      StoreDevtoolsModule.instrument(),
+      EffectsModule.forRoot([ CountriesEffects ]),
+      CountriesService
     ),
-    CommonModule,
-    provideAnimations(),
-    provideHttpClient(withInterceptorsFromDi())
+    provideRouter(APP_ROUTES),
+    provideAnimations()
   ]
-})
-  .catch(err => console.error(err));
+});

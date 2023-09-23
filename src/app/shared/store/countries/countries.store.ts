@@ -1,56 +1,53 @@
+import { CountriesState } from '@app/shared/models/country';
 import { Action, ActionReducer, createReducer, on } from '@ngrx/store';
-
-import { CountriesState, Country } from '@app/shared/models/countries';
-import { storeAllCountriesList, storeFilter, storeFilteredCountries, storeSelectedCca3, storeSelectedCountryByCca3, storeSelectedCountryNeighbours } from './countries.actions';
+import { 
+  initCountriesListSession, 
+  initNeighborsList, 
+  setCCA3ForSelectedCountry, 
+  setFilterId, 
+  setFilteredCountries, 
+  setNeighborsForSelectedCountry, 
+  setSelectedCountry 
+} from './countries.actions';
 
 export const initialState: CountriesState = {
   allCountries: [],
-  selectedCountryByCca3: undefined,
+  selectedCountry: undefined,
   filter: undefined
-}
+};
 
 const countriesReducer: ActionReducer<CountriesState> = createReducer(
   initialState,
-  on(storeAllCountriesList, (state, { payload }) => ({
+  on(initCountriesListSession, (state, { countries }) => ({
     ...state,
-    allCountries: payload as Country[]
+    allCountries: countries
   })),
-  on(storeFilter, (state, { filter }) => ({
+  on(setFilterId, (state, { filterId }) => ({
     ...state,
-    filter: filter,
-    selectedCountryByCca3: undefined
+    filter: { ...state.filter!, filterId }
   })),
-  on(storeFilteredCountries, (state, { filteredCountries }) => ({
+  on(setFilteredCountries, (state, { countries }) => ({
     ...state,
-    filter: {type: state?.filter?.type, value: state?.filter?.value, countries: filteredCountries},
-    selectedCountryByCca3: undefined
+    filter: { ...state.filter!, countries: countries }
   })),
-  on(storeSelectedCca3, (state, { payload }) => ({
+  on(setCCA3ForSelectedCountry, (state, { cca3 }) => ({
     ...state,
-    selectedCountryByCca3: {
-      cca3: payload,
-      country: state.selectedCountryByCca3?.country,
-      neighbors: state.selectedCountryByCca3?.neighbors
-    }
+    selectedCountry: { ...state.selectedCountry!, cca3 }
   })),
-  on(storeSelectedCountryByCca3, (state, { payload }) => ({
+  on(setSelectedCountry, (state, { country }) => ({
     ...state,
-    selectedCountryByCca3: {
-      cca3: state.selectedCountryByCca3?.cca3,
-      country: payload,
-      neighbors: state.selectedCountryByCca3?.neighbors
-    }
+    selectedCountry: { ...state.selectedCountry!, country }
   })),
-  on(storeSelectedCountryNeighbours, (state, { neighborArray }) => ({
+  on(setNeighborsForSelectedCountry, (state, { neighbors }) => ({
     ...state,
-    selectedCountryByCca3: {
-      cca3: state.selectedCountryByCca3?.cca3,
-      country: state.selectedCountryByCca3?.country,
-      neighbors: neighborArray
-    }
+    selectedCountry: { ...state.selectedCountry!, neighbors }
+  })),
+  on(initNeighborsList, (state) => ({
+    ...state,
+    selectedCountry: undefined
   }))
 );
 
-export function coutriesReducer(state: CountriesState | undefined, action: Action): CountriesState {
+export function getCountriesReducer(state: CountriesState | undefined, action: Action): CountriesState {
   return countriesReducer(state, action);
 }
