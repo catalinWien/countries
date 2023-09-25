@@ -1,5 +1,5 @@
 import { CommonModule, NgIf, NgForOf } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CountryCardComponent } from '@components/country-card/country-card.component';
 import { CountriesState, SelectedCountryState } from '@models/country';
@@ -8,7 +8,7 @@ import { Store, select } from '@ngrx/store';
 import { NavigationService } from '@services/navigation.service';
 import { setCCA3ForSelectedCountry } from '@store/countries/countries.actions';
 import { getSelectedCountry } from '@store/countries/countries.selectors';
-import { Observable, Subject, map } from 'rxjs';
+import { Observable, Subject, map, takeUntil } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -19,7 +19,7 @@ import { Observable, Subject, map } from 'rxjs';
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 
 })
-export class CountriesDetailsComponent implements OnInit {
+export class CountriesDetailsComponent implements OnInit, OnDestroy {
   private readonly unsubscribe: Subject<void> = new Subject<void>();
   selectedCountryDetailsResult$!: Observable<SelectedCountryState | undefined>;
   routingParam!: string;
@@ -32,7 +32,9 @@ export class CountriesDetailsComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
+    this.route.params
+    .pipe(takeUntil(this.unsubscribe))
+    .subscribe(params => {
       this.routingParam = params['cca3'];
       this.store.dispatch(setCCA3ForSelectedCountry(this.routingParam));
     });
@@ -59,5 +61,10 @@ export class CountriesDetailsComponent implements OnInit {
 
   goBack(): void {
     this.navigation.back()
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }
